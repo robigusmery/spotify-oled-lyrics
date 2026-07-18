@@ -1,0 +1,3 @@
+SwSpotify==2.3.0
+lyricsgenius==3.0.1
+pyserial==3.5
