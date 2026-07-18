@@ -1,150 +1,86 @@
-<div align="center">
+# 🎵 Spotify Real-time Lyrics Streamer to I2C Hardware Display
 
-# 🎵 Spotify Real-Time Lyrics Streamer
-
-<p align="center">
-  <img src="https://img.shields.io/badge/Platform-Arduino_Uno-00979D?style=for-the-badge&logo=arduino&logoColor=white" alt="Arduino">
-  <img src="https://img.shields.io/badge/Language-Python_3-3776AB?style=for-the-badge&logo=python&logoColor=white" alt="Python">
-  <img src="https://img.shields.io/badge/Service-Spotify-1DB954?style=for-the-badge&logo=spotify&logoColor=white" alt="Spotify">
-  <img src="https://img.shields.io/badge/License-MPL_2.0-red?style=for-the-badge" alt="License">
-</p>
+A smart hardware-software integration that tracks your active Spotify playback in real-time, automatically fetches the matching song lyrics via the Genius API, and streams them line-by-line onto an external I2C hardware display connected to an Arduino.
 
 ---
 
-### 🌟 Bring Your Desktop Music to Life
-An elegant IoT hardware-software bridge that hooks into your **Spotify Desktop client**, fetches dynamic, cleaned lyrics via the **Genius API**, and streams them seamlessly onto an **I2C OLED Display** powered by an **Arduino Uno**.
-
-[✨ Features](#-key-features) • [📂 Structure](#-repository-architecture) • [🔌 Wiring](#-hardware-wiring) • [🚀 Getting Started](#-installation--setup)
-
-</div>
-
----
-
-## ⚡ Key Features
-
-* 🚀 **Instant Track Sync** — Seamlessly detects song updates on your desktop app within milliseconds.
-* 📝 **Automated Lyric Fetching** — Automatically isolates and formats lyric strings from Genius API.
-* 📟 **Optimized Text Buffer** — Handles layout margins and clear-screen buffers natively on the OLED panel.
-* ⚡ **High-Speed Serial Bridge** — Fast data pipeline streaming via standard USB Serial at `115200 baud`.
+## 🚀 Features
+- **Device-Agnostic Real-time Tracking:** Utilizes the official Spotify Web API (`spotipy`) to catch track changes instantly, whether you play music from your desktop, mobile, or web player.
+- **Automated Lyrics Fetching:** Integrates with the Genius API (`lyricsgenius`) to dynamically source and clean up song lyrics on the fly.
+- **Robust Serial Communication:** Streams data smoothly over a USB Serial interface at 115200 baud rate with custom data-handling logic to prevent buffer overflows.
+- **Clean Hardware Output:** Automatically formats and wraps long lyric lines to fit dual-line character displays perfectly.
 
 ---
 
-## 📂 Repository Architecture
+## 🛠️ Hardware Requirements
+- **Microcontroller:** Arduino Uno, Nano, or Mega.
+- **Display:** 16x2 I2C Character LCD (or compatible I2C display running on address `0x27`).
+- **Wiring:** 4x Jumper wires (VCC to 5V, GND to GND, SDA to A4, SCL to A5 on standard Uno).
 
-```text
-spotify-oled-lyrics/
-├── .gitignore
-├── LICENSE
-├── README.md
-├── requirements.txt
-├── src/
-│   └── spotify_to_arduino.py       # Host Core Logic (Python)
-└── firmware/
-    └── spotify_lyrics/
-        └── spotify_lyrics.ino      # Embedded Device Firmware (C++)
+---
+
+## 📦 Software Setup
+
+### 1. Hardware Initialization
+1. Open the Arduino IDE.
+2. Go to **Tools** > **Manage Libraries...** and install the **LiquidCrystal I2C** library (by Frank de Brabander / Marco Schwartz).
+3. Open `spotify_oled_controller.ino` from this project, verify the configuration, and upload it to your board.
+> **Note:** Make sure to close the Arduino Serial Monitor after uploading, as it will otherwise block the Python script from accessing the COM port.
+
+### 2. Python Environment Setup
+1. Clone this repository to your local machine:
+   ```bash
+   git clone [https://github.com/YOUR_USERNAME/YOUR_REPO_NAME.git](https://github.com/YOUR_USERNAME/YOUR_REPO_NAME.git)
+   cd YOUR_REPO_NAME
 
 ```
 
----
-
-## 🛠️ System Workflow
-
-```
-┌──────────────────┐               ┌──────────────────────┐
-│ Spotify Desktop  │ ──(Session)─> │ Python Service (src) │
-└──────────────────┘               └──────────┬───────────┘
-                                              │ (Genius API Fetch)
-                                              ▼
-┌──────────────────┐               ┌──────────────────────┐
-│ OLED Panel (I2C) │ <───(Bus)──── │ Arduino Uno (firm)   │ <──(USB Serial)
-└──────────────────┘               └──────────────────────┘
-
-```
-
-### 🎛️ Tech Stack
-
-* **Microcontroller:** Arduino Uno R3 *(ATmega328P architecture)*
-* **Display Panel:** SSD1306 0.96" I2C OLED Screen *(128x64 pixels)*
-* **Host Engine:** Python 3.8+ Background Pipeline
-
----
-
-## 🔌 Hardware Wiring
-
-| OLED Pins | Arduino Pins | Function | Wire Color (Rec.) |
-| --- | --- | --- | --- |
-| **VCC** | `5V` / `3.3V` | Power Interface | 🔴 Red |
-| **GND** | `GND` | Common Ground Connection | ⚫ Black |
-| **SCL** | `A5` / `SCL` | I2C Hardware Serial Clock | 🟡 Yellow |
-| **SDA** | `A4` / `SDA` | I2C Hardware Serial Data | 🟢 Green |
-
----
-
-## 🚀 Installation & Setup
-
-### 📦 1. Firmware Initialization
-
-1. Launch the **Arduino IDE**.
-2. Press `Ctrl+Shift+I` to open the **Library Manager**, then install:
-* **Adafruit SSD1306**
-* **Adafruit GFX Library**
-
-
-3. Open `firmware/spotify_lyrics/spotify_lyrics.ino` and **Upload** it to the Uno.
-4. Go to **Tools > Port** and make sure to copy your connection port *(e.g., `COM3`)*.
-
-### 🔑 2. API Credentials Configuration
-
-1. Head over to the [Genius Developer Portal](https://genius.com/api-clients).
-2. Create a new client token workspace with these configurations:
-* **App Name:** `Spotify-OLED-Streamer`
-* **App Website URL:** `https://github.com`
-* **Redirect URI:** `http://localhost`
-
-
-3. Hit **Save** and extract your premium **Client Access Token**.
-
-### 💻 3. Environment Integration
-
-1. Open up your preferred CLI prompt at the root project workspace directory.
-2. Install standard framework dependencies:
+2. Install all required dependencies using `pip`:
 ```bash
 pip install -r requirements.txt
 
 ```
 
 
-3. Open `src/spotify_to_arduino.py` and inject your active configuration properties:
+
+### 3. API Credentials Configuration
+
+To establish a secure connection, you need to grab tokens from both platform dashboards:
+
+* **Genius:** Create an API client at [Genius Developers](https://genius.com/api-clients) to obtain your access token.
+* **Spotify:** Head over to the [Spotify Developer Dashboard](https://developer.spotify.com/dashboard), create an application, and set the **Redirect URI** strictly to `https://localhost:8888/callback`. Copy your `Client ID` and `Client Secret`.
+
+Open `song.py` and input your keys inside the configuration block:
+
 ```python
-GENIUS_TOKEN = "YOUR_GENIUS_ACCESS_TOKEN_HERE"
-ARDUINO_PORT = "COM3"  # Change to your mapped serial port
+# === CONFIGURATION SUBSYSTEM ===
+GENIUS_TOKEN = "YOUR_GENIUS_API_TOKEN"
+ARDUINO_PORT = 'COM3'  # Update to match your actual Arduino port
+BAUD_RATE = 115200
+
+SPOTIPY_CLIENT_ID = "YOUR_SPOTIFY_CLIENT_ID"
+SPOTIPY_CLIENT_SECRET = "YOUR_SPOTIFY_CLIENT_SECRET"
+SPOTIPY_REDIRECT_URI = "https://localhost:8888/callback"
+# ===============================
 
 ```
 
-
-
 ---
 
-## 🏃 Execution Path
+## 🏃 Running the Application
 
-1. Interface your hardware assembly unit safely into the host PC terminal slot.
-2. Start up the **Spotify Desktop Client** app and play a track.
-3. Trigger the data engine script directly from your terminal:
+1. Connect your Arduino to your computer via USB.
+2. Fire up the Python automation script:
 ```bash
-python src/spotify_to_arduino.py
+python song.py
 
 ```
 
 
-4. Watch the hardware terminal flip smoothly from `"Awaiting Spotify..."` straight into the real-time lryics feed.
+3. *First-time run only:* A browser window will pop up prompting you to log into Spotify and authorize the app. Once accepted, you will be redirected to a blank URL starting with `https://localhost:8888/callback...`. **Copy the entire URL from your browser address bar and paste it into your terminal.**
+4. Play any track on your Spotify app and watch the lyrics stream onto your hardware display completely hands-free!
 
----
-
-## ⚠️ Scope & Constraints
-
-* **Serial Link Dependency:** The ATmega328P lacks built-in Wi-Fi adapters. The device requires an ongoing USB physical tether connection link to stay updated.
-* **Scroll Speed Tuning:** Pacing intervals are configured by a basic linear baseline delay timer via `time.sleep(4)`. You can adjust this value anytime to dynamically calibrate the scroll cadence against the average rhythm of your favorite playlist.
-
+```
 ---
 
 ## 🤝 Open Source Contributions
