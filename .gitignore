@@ -1,13 +1,13 @@
-# Python bytecode
+# Python environment files
 __pycache__/
 *.pyc
-
-# Environments
-.env
-.venv
-env/
+.venv/
 venv/
+ENV/
 
-# Operating System Files
+# OS configuration files
 .DS_Store
 Thumbs.db
+
+# Sensitive credentials (If stored in .env)
+.env
