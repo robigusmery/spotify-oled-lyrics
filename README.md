@@ -1,8 +1,3 @@
-Untuk mempermudah kamu agar tidak ada karakter yang rusak atau terpotong akibat rendering Markdown, file **`README.md`** final di bawah ini dibungkus menggunakan tipe blok teks mentah khusus.
-
-Kamu cukup menekan tombol **"Copy"** di pojok kanan atas kotak abu-abu di bawah ini, lalu langsung buat file baru bernama `README.md` di komputermu dan *paste* (`Ctrl+V`).
-
-```text
 <div align="center">
 
 # 🎵 Spotify Real-Time Lyrics Streamer
