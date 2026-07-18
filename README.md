@@ -109,7 +109,7 @@ SPOTIPY_REDIRECT_URI = "https://localhost:8888/callback"
 1. Interface your Arduino device with the host computer using a dedicated USB bridge cable.
 2. Initialize the Python host orchestrator script:
 ```bash
-python song.py
+python spotify_to_arduino.py
 
 ```
 
