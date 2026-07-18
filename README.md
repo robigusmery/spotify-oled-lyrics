@@ -124,9 +124,3 @@ python song.py
 This project is licensed under the **Mozilla Public License 2.0 (MPL-2.0)**.
 
 Source code modification and integration rules apply according to the standard MPL-2.0 copyleft terms. A complete legal copy of the license is provided in the accompanying [LICENSE](https://www.google.com/search?q=LICENSE) file located within the root directory of this repository.
-
-```
-
----kamu sekarang sudah setara dengan standar proyek *open-source* profesional.
-
-```
